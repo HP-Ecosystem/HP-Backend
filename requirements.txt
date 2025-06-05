@@ -37,5 +37,6 @@ sqlparse==0.5.3
 typing-extensions==4.14.0
 tzdata==2025.2
 uritemplate==4.2.0
+uuid6==2024.7.10
 virtualenv==20.31.2
 whitenoise==6.9.0

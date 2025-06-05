@@ -37,3 +37,11 @@ class UnprocessableEntityError(BaseAPIException):
     status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
     default_detail = "Unable to process the request."
     default_code = "unprocessable_entity"
+
+
+class BadRequestError(BaseAPIException):
+    """Exception for bad request errors (400)."""
+
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "Bad request."
+    default_code = "bad_request"

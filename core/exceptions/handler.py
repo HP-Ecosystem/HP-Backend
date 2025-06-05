@@ -10,9 +10,9 @@ from rest_framework import exceptions, status
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
-from core.logging.base import logger
+from core.logging import logger
 
-from .base import ConflictError, UnprocessableEntityError
+from . import ConflictError, UnprocessableEntityError
 
 
 def normalize_error_detail(detail: Any) -> str | list[str] | dict[str, Any]:

@@ -1,0 +1,16 @@
+"""Authentication app configuration."""
+
+from django.apps import AppConfig
+
+
+class AuthenticationConfig(AppConfig):
+    """Configuration fo the authentication app."""
+
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.authentication"
+    verbose_name = "Authentication"
+
+    def ready(self) -> None:
+        """Perform initialization tasks."""
+
+        pass

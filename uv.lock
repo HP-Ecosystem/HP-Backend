@@ -236,10 +236,12 @@ dependencies = [
     { name = "django" },
     { name = "django-cors-headers" },
     { name = "django-environ" },
+    { name = "djangorestframework" },
     { name = "djangorestframework-simplejwt" },
     { name = "drf-spectacular" },
     { name = "drf-spectacular-sidecar" },
     { name = "loguru" },
+    { name = "uuid6" },
     { name = "whitenoise" },
 ]
 
@@ -259,6 +261,7 @@ requires-dist = [
     { name = "django-cors-headers", specifier = ">=4.7.0" },
     { name = "django-debug-toolbar", marker = "extra == 'dev'", specifier = ">=5.2.0" },
     { name = "django-environ", specifier = ">=0.12.0" },
+    { name = "djangorestframework", specifier = ">=3.16.0" },
     { name = "djangorestframework-simplejwt", specifier = ">=5.5.0" },
     { name = "drf-spectacular", specifier = ">=0.28.0" },
     { name = "drf-spectacular-sidecar", specifier = ">=2025.6.1" },
@@ -267,6 +270,7 @@ requires-dist = [
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.2.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.4.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6.1.1" },
+    { name = "uuid6", specifier = ">=2024.7.10" },
     { name = "whitenoise", specifier = ">=6.9.0" },
 ]
 provides-extras = ["dev"]
@@ -560,6 +564,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/98/60/f174043244c5306c9988380d2cb10009f91563fc4b31293d27e17201af56/uritemplate-4.2.0.tar.gz", hash = "sha256:480c2ed180878955863323eea31b0ede668795de182617fef9c6ca09e6ec9d0e", size = 33267, upload-time = "2025-06-02T15:12:06.318Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a9/99/3ae339466c9183ea5b8ae87b34c0b897eda475d2aec2307cae60e5cd4f29/uritemplate-4.2.0-py3-none-any.whl", hash = "sha256:962201ba1c4edcab02e60f9a0d3821e82dfc5d2d6662a21abd533879bdb8a686", size = 11488, upload-time = "2025-06-02T15:12:03.405Z" },
+]
+
+[[package]]
+name = "uuid6"
+version = "2024.7.10"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/2c/56/2560a9f1ccab9e12b1b3478a3c870796cf4d8ee5652bb19b61751cced14a/uuid6-2024.7.10.tar.gz", hash = "sha256:2d29d7f63f593caaeea0e0d0dd0ad8129c9c663b29e19bdf882e864bedf18fb0", size = 8705, upload-time = "2024-07-10T16:39:37.592Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d3/3e/4ae6af487ce5781ed71d5fe10aca72e7cbc4d4f45afc31b120287082a8dd/uuid6-2024.7.10-py3-none-any.whl", hash = "sha256:93432c00ba403751f722829ad21759ff9db051dea140bf81493271e8e4dd18b7", size = 6376, upload-time = "2024-07-10T16:39:36.148Z" },
 ]
 
 [[package]]

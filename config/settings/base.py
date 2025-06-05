@@ -48,7 +48,9 @@ THIRD_PARTY_APPS = [
     "drf_spectacular_sidecar",
 ]
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    "authentication",
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -190,3 +192,6 @@ LOG_FILE = LOGS_DIR / "hp.log"
 LOG_FILE.touch(exist_ok=True)
 
 LOGGING_LEVEL = env.str("LOGGING_LEVEL", default="INFO")
+
+# Custom User model
+AUTH_USER_MODEL = "authentication.User"
