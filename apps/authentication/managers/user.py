@@ -8,12 +8,12 @@ encapsulating complex queries and providing a clean API for data access.
 from typing import TYPE_CHECKING
 
 from django.contrib.auth import models as auth_models
-from django.db import models
+from django.db import models, transaction
 
 from core.exceptions import BadRequestError, ConflictError
 
 if TYPE_CHECKING:
-    from models import User
+    from apps.authentication.models import User
 from core.models import BaseManager, BaseQuerySet
 
 
@@ -21,7 +21,7 @@ class UserQuerySet(BaseQuerySet):
     """Custom QuerySet for User model."""
 
     def search(self, query: str) -> "UserQuerySet":
-        """Simple search for users by email, name, or phone number."""
+        """Simple search for users by part or whole email, name, or phone number."""
 
         return self.filter(
             models.Q(email__icontains=query)
@@ -34,6 +34,10 @@ class UserQuerySet(BaseQuerySet):
 class UserManager(auth_models.BaseUserManager, BaseManager):
     """Custom Manager for User model."""
 
+    def get_queryset(self):
+        return UserQuerySet(model=self.model, using=self._db)
+
+    @transaction.atomic
     def _create_user(self, email: str, password: str, **extra_fields) -> "User":
         """Factory for user creation."""
 
@@ -87,7 +91,11 @@ class UserManager(auth_models.BaseUserManager, BaseManager):
     def _create_profile(self, user: "User") -> None:
         """Create the appropriate profile for a user based on their type."""
 
-        from models import AgentProfile, ClientProfile, VendorProfile
+        from apps.authentication.models import (
+            AgentProfile,
+            ClientProfile,
+            VendorProfile,
+        )
 
         profile_map = {
             "AGENT": AgentProfile,
@@ -103,3 +111,8 @@ class UserManager(auth_models.BaseUserManager, BaseManager):
         """Allow authentication by email."""
 
         return self.get(email__iexact=username)
+
+    def search(self, query: str) -> "User":
+        """Get user by email address."""
+
+        return self.get_queryset().search(query)

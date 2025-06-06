@@ -1,6 +1,6 @@
 """Development settings for Housing & Properties project."""
 
-from .base import *  # noqa
+from config.settings.base import *  # noqa
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -25,3 +25,10 @@ CORS_ALLOWED_ORIGINS = [
 
 # Email Backend for development
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Cache config
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
+}

@@ -1,7 +1,7 @@
 """Production settings for Housing & Properties project."""
 
-from .base import *  # noqa
-from .base import env
+from config.settings.base import *  # noqa
+from config.settings.base import env
 
 # Security Settings
 DEBUG = False
@@ -20,3 +20,10 @@ X_FRAME_OPTIONS = "DENY"
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+
+# Email configuration
+EMAIL_HOST = env.str("EMAIL_HOST")
+EMAIL_PORT = env.int("EMAIL_PORT")
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS")
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")

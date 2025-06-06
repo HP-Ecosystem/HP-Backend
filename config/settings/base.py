@@ -49,7 +49,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "authentication",
+    "authentication.apps.AuthenticationConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -180,7 +180,6 @@ SPECTACULAR_SETTINGS = {
     "REDOC_DIST": "SIDECAR",
     "COMPONENT_SPLIT_REQUEST": True,
     "SCHEMA_PATH_PREFIX": "/api/v[0-9]",
-    "SCHEMA_PATH_PREFIX_TRIM": True,
     "ENUM_NAME_OVERRIDES": {},
 }
 
@@ -195,3 +194,15 @@ LOGGING_LEVEL = env.str("LOGGING_LEVEL", default="INFO")
 
 # Custom User model
 AUTH_USER_MODEL = "authentication.User"
+
+
+# Email configuration
+DEFAULT_FROM_EMAIL = env.str(
+    "DEFAULT_FROM_EMAIL", default="noreply@housingandproperties.com"
+)
+EMAIL_BACKEND = env.str(
+    "EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
+)
+
+# Verification token expiry
+VERIFICATION_TOKEN_EXPIRY = env.int("VERIFICATION_TOKEN_EXPIRY", default=15)  # minutes

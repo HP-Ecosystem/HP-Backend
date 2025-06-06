@@ -1,8 +1,3 @@
-"""Auth app managers."""
+from apps.authentication.managers.user import UserManager
 
-from .user import UserManager, UserQuerySet
-
-__all__ = [
-    "UserManager",
-    "UserQuerySet",
-]
+__all__ = ["UserManager"]

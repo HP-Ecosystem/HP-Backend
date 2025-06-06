@@ -89,4 +89,4 @@ exclude_lines = [
 ]
 
 [tool.setuptools]
-packages = ["api","apps","core","config","tests"]
+packages = ["api","apps","core","config"]

@@ -1,5 +1,3 @@
-"""Base exception classes for Housing & Properties."""
-
 from typing import Any
 
 from rest_framework import status

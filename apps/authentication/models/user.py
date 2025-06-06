@@ -1,11 +1,3 @@
-"""
-User model implementation.
-
-This module implements a custom user model that extends Django's AbstractUser
-to support multiple user types (clients, agents, vendors, admins)
-with type-specific attributes and behaviors.
-"""
-
 import uuid6
 from authentication.managers import UserManager
 from django.contrib.auth import models as auth_models
@@ -15,7 +7,13 @@ from core.models import BaseModel
 
 
 class User(auth_models.AbstractUser, BaseModel):
-    """Custom user model for Housing & Properties marketplace."""
+    """
+    Custom user model for Housing & Properties marketplace.
+
+    This module implements a custom user model that extends Django's AbstractUser
+    to support multiple user types (clients, agents, vendors, admins)
+    with type-specific attributes and behaviors.
+    """
 
     class UserType(models.TextChoices):
         """Enumeration of user types in the system."""
@@ -81,7 +79,8 @@ class User(auth_models.AbstractUser, BaseModel):
 
         return self.user_type == self.UserType.ADMIN
 
-    def get_full_name(self) -> str:
+    @property
+    def full_name(self) -> str:
         """Return the user's full name."""
 
         return f"{self.first_name} {self.last_name}".strip() or self.email

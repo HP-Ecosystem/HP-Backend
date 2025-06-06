@@ -1,7 +1,3 @@
-"""Core logging module."""
+from core.logging.base import logger
 
-from .base import logger
-
-__all__ = [
-    "logger",
-]
+__all__ = ["logger"]

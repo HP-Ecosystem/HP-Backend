@@ -1,10 +1,3 @@
-"""
-User profile models for type-sensitive data
-
-This module implements the profile pattern to store additional data
-specific to each user type.
-"""
-
 from django.core import validators
 from django.db import models
 

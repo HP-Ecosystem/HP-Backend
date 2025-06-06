@@ -47,7 +47,7 @@ clean:
 
 .PHONY: shell
 shell:
-	uv run manage.py shell_plus --ipython
+	uv run manage.py shell --force-color
 
 .PHONY: check
 check:

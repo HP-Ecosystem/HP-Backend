@@ -1,5 +1,3 @@
-"""Base models and managers for Housing & Properties."""
-
 from typing import Any
 
 from django.db import models

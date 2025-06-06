@@ -1,5 +1,3 @@
-"""Custom exception handlers for the Housing & Properties API."""
-
 from typing import Any
 
 from django.core.exceptions import PermissionDenied
@@ -10,9 +8,8 @@ from rest_framework import exceptions, status
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
+from core.exceptions import ConflictError, UnprocessableEntityError
 from core.logging import logger
-
-from . import ConflictError, UnprocessableEntityError
 
 
 def normalize_error_detail(detail: Any) -> str | list[str] | dict[str, Any]:

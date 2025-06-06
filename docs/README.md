@@ -93,37 +93,38 @@ The project follows a modular monolith architecture with clear domain boundaries
 
 ```ini
 housing_properties/
-├── apps/                  # Domain-specific applications
-│   └── authentication/    # Authentication & user management
-│       ├── api/           # Views and URL routing
-│       ├── managers/      # Custom model managers
-│       ├── models/        # User and profile models
-│       ├── permissions/   # Custom permissions
-│       ├── serializers/   # DRF serializers
-│       ├── services/      # Business logic layer
-│       ├── tests/         # App-specific tests
-│       └── apps.py        # Authentication AppConfig
-├── api/                   # API versioning and routing
-│   └── v1/                # Version 1 API URLs
-├── config/                # Django settings and configuration
-│   ├── settings/          # Environment-specific settings
-│   │   ├── base.py        # Common settings
+├── apps/                     # Domain-specific applications
+│   └── authentication/       # Authentication & user management
+│       ├── managers/         # Custom model managers
+│       ├── models/           # User and profile models
+│       ├── permissions/      # Custom permissions
+│       ├── serializers/      # DRF serializers
+│       ├── services/         # Business logic layer
+│       ├── tests/            # App-specific tests
+│       ├── views/            # Views
+│       └── apps.py           # Authentication AppConfig
+├── api/                      # API versioning and routing
+│   └── v1/urls/              # Version 1 API URLs routing
+├── config/                   # Django settings and configuration
+│   ├── settings/             # Environment-specific settings
+│   │   ├── base.py           # Common settings
 │   │   ├── development.py
 │   │   ├── production.py
 │   │   └── test.py
-│   ├── urls.py            # Root URL configuration
-│   └── wsgi.py            # WSGI configuration
-├── core/                  # Shared utilities and base classes
-│   ├── exceptions/        # Custom exceptions & handlers
-│   ├── logging/           # Loguru configuration
-│   ├── middleware/        # Custom middleware
-│   └── models.py          # Base model classes
-├── logs/                  # Application logs
-├── .env.template          # Environment variables template
-├── Makefile               # Common commands
-├── manage.py              # Django management script
-├── pre-commit-config.yaml # Pre-commit configuration
-└── pyproject.toml         # Project dependencies & tools config
+│   ├── urls.py               # Root URL configuration
+│   └── wsgi.py               # WSGI configuration
+├── core/                     # Shared utilities and base classes
+│   ├── exceptions/           # Custom exceptions & handlers
+│   ├── logging/              # Loguru configuration
+│   ├── middleware/           # Custom middleware
+│   ├── utils/                # Utility functions and classes
+│   └── models.py             # Base model classes
+├── logs/                     # Application logs
+├── .env.template             # Environment variables template
+├── Makefile                  # Common commands
+├── manage.py                 # Django management script
+├── pre-commit-config.yaml    # Pre-commit configuration
+└── pyproject.toml            # Project dependencies & tools config
 ```
 
 ## Implemented Features
@@ -235,7 +236,7 @@ make superuser  # Create admin user
 
 ```bash
 make run       # Start development server
-make shell     # Django shell with IPython
+make shell     # Django shell
 make check     # Run Django system checks
 ```
 **Code Quality:**
@@ -262,7 +263,7 @@ make clean     # Remove cache files and artifacts
 
 ### Exception Handling
 
-- Custom exceptions in core.exceptions.base
+- Custom exceptions in `core.exceptions.base`
 - Consistent error response format
 - Proper HTTP status codes
 

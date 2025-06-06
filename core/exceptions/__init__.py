@@ -1,12 +1,10 @@
-"""Core exceptions module."""
-
-from .base import (
+from core.exceptions.base import (
     BadRequestError,
     BaseAPIException,
     ConflictError,
     UnprocessableEntityError,
 )
-from .handler import hp_exception_handler
+from core.exceptions.handler import hp_exception_handler
 
 __all__ = [
     "BaseAPIException",
