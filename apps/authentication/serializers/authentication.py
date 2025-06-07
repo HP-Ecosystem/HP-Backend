@@ -25,9 +25,9 @@ class UserRegistrationSerializer(serializers.Serializer):
         help_text="Type of account to create",
     )
 
-    first_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
+    first_name = serializers.CharField(required=True, max_length=30)
 
-    last_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
+    last_name = serializers.CharField(required=True, max_length=30)
 
 
 class UserLoginSerializer(serializers.Serializer):

@@ -8,7 +8,7 @@ encapsulating complex queries and providing a clean API for data access.
 from typing import TYPE_CHECKING
 
 from django.contrib.auth import models as auth_models
-from django.db import models, transaction
+from django.db import IntegrityError, models
 
 from core.exceptions import BadRequestError, ConflictError
 
@@ -37,7 +37,6 @@ class UserManager(auth_models.BaseUserManager, BaseManager):
     def get_queryset(self):
         return UserQuerySet(model=self.model, using=self._db)
 
-    @transaction.atomic
     def _create_user(self, email: str, password: str, **extra_fields) -> "User":
         """Factory for user creation."""
 
@@ -46,15 +45,19 @@ class UserManager(auth_models.BaseUserManager, BaseManager):
 
         email = self.normalize_email(email)
 
-        if self.filter(email__iexact=email).exists():
-            raise ConflictError(f"User with email '{email}' already exists")
-
         user = self.model(email=email, **extra_fields)
 
         user.set_password(password)
-        user.save(using=self._db)
 
-        self._create_profile(user)
+        try:
+            user.save(using=self._db)
+            self._create_profile(user)
+        except IntegrityError as e:
+            if "email" in str(e):
+                raise ConflictError(f"User with email '{email}' already exists") from e
+            raise ConflictError(str(e)) from e
+        except Exception as e:
+            raise e
 
         return user
 

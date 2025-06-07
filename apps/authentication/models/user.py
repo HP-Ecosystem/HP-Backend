@@ -29,7 +29,7 @@ class User(auth_models.AbstractUser, BaseModel):
     user_type = models.CharField(
         max_length=10, choices=UserType.choices, default=UserType.CLIENT, db_index=True
     )
-    phone_number = models.CharField(max_length=20, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True, unique=True)
     is_email_verified = models.BooleanField(default=False)
     is_phone_verified = models.BooleanField(default=False)
 

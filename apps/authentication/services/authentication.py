@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
-from django.db import transaction
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .email import EmailService
@@ -17,6 +16,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.authentication import authenticate
 
 from core.exceptions import BadRequestError
+from core.logging import logger
 
 User = get_user_model()
 
@@ -32,7 +32,6 @@ class AuthenticationService:
     - Email verification
     """
 
-    @transaction.atomic
     def register_user(
         self, email: str, password: str, first_name: str, last_name: str, user_type: str
     ) -> tuple["UserType", dict[str, str]]:
@@ -81,10 +80,12 @@ class AuthenticationService:
         """Verify user's email address."""
 
         cache_key = f"email_verify_{user_id}"
-        cached_id, cached_token = cache.get(cache_key)
 
-        if not cached_token or cached_token != token:
-            raise ValidationError(_("Invalid or expired verification token"))
+        try:
+            cached_id, cached_token = cache.get(cache_key)
+        except Exception as e:
+            logger.exception(e)
+            raise ValidationError(_("Invalid or expired verification token")) from e
 
         user = User.objects.get(id=cached_id)
         user.is_email_verified = True

@@ -55,7 +55,6 @@ def hp_exception_handler(exc: Exception, context: dict[str, Any]) -> Response | 
     Returns:
         Response object with formatted error data or None
     """
-
     if isinstance(exc, DjangoValidationError):
         exc = exceptions.ValidationError(
             detail=exc.message_dict if hasattr(exc, "message_dict") else exc.messages
@@ -66,6 +65,9 @@ def hp_exception_handler(exc: Exception, context: dict[str, Any]) -> Response | 
         )
     elif isinstance(exc, exceptions.ParseError):
         exc = UnprocessableEntityError(detail=str(exc.detail))
+    elif isinstance(exc, TypeError):
+        logger.exception(exc)
+        exc = UnprocessableEntityError(detail=str(exc))
 
     response = exception_handler(exc, context)
 
