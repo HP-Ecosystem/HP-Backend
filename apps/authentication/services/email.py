@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.html import strip_tags
 
 if TYPE_CHECKING:
@@ -68,10 +69,19 @@ class EmailService:
     ) -> int:
         """Send email verification email."""
 
+        verification_url = reverse(
+            "authentication:verify-email",
+            kwargs={
+                "user_id": str(user.uuid),
+                "verification_token": verification_token,
+            },
+        )
+
         context = {
             "user": user,
-            "verification_code": verification_token,
             "expiry_minutes": token_expiry,
+            "verification_url": verification_url,
+            "from_domain": settings.FROM_DOMAIN,
         }
 
         return EmailService.send_template_email(

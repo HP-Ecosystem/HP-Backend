@@ -30,6 +30,22 @@ class UserRegistrationSerializer(serializers.Serializer):
     last_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
 
 
+class UserLoginSerializer(serializers.Serializer):
+    """Serializer for user login."""
+
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(
+        required=True, write_only=True, style={"input_type": "password"}
+    )
+
+
+class EmailVerificationSerializer(serializers.Serializer):
+    """Serializer for email verification requests."""
+
+    user_id = serializers.CharField(write_only=True)
+    token = serializers.CharField(write_only=True, help_text="Email verification token")
+
+
 class TokenSerializer(serializers.Serializer):
     """
     Serializer for JWT token response.
@@ -58,3 +74,12 @@ class TokenSerializer(serializers.Serializer):
                 "is_verified": user.is_email_verified,
             }
         return {}
+
+
+class ErrorResponseExampleSerializer(serializers.Serializer):
+    """Serializer representing error response schema for OpenApi."""
+
+    success = serializers.BooleanField(read_only=True, default=False)
+    message = serializers.CharField(read_only=True)
+    errors = serializers.DictField(read_only=True)
+    status_code = serializers.IntegerField(read_only=True)

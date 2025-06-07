@@ -13,6 +13,11 @@ if TYPE_CHECKING:
     from authentication.models import User as UserType
 import re
 
+from django.utils.translation import gettext_lazy as _
+from rest_framework.authentication import authenticate
+
+from core.exceptions import BadRequestError
+
 User = get_user_model()
 
 
@@ -52,6 +57,42 @@ class AuthenticationService:
 
         except Exception as e:
             raise e
+
+    def login(self, email: str, password: str) -> tuple["UserType", dict[str, str]]:
+        """Authenticate user and generate tokens."""
+
+        user = authenticate(username=email, password=password)
+        if not user:
+            raise ValidationError(_("Invalid email or password"))
+
+        if not user.is_active:
+            raise BadRequestError("Requested user account is deactivated")
+
+        if not user.is_email_verified:
+            raise BadRequestError(
+                _("Requested user email is not verified. Please verify your email")
+            )
+
+        tokens = self._generate_authentication_tokens(user)
+
+        return user, tokens
+
+    def verify_email(self, user_id: str, token: str) -> bool:
+        """Verify user's email address."""
+
+        cache_key = f"email_verify_{user_id}"
+        cached_id, cached_token = cache.get(cache_key)
+
+        if not cached_token or cached_token != token:
+            raise ValidationError(_("Invalid or expired verification token"))
+
+        user = User.objects.get(id=cached_id)
+        user.is_email_verified = True
+        user.save(update_fields=["is_email_verified"])
+
+        cache.delete(cache_key)
+
+        return True
 
     def _validate_password(self, password: str) -> None:
         if not re.search(r"[A-Z]", password):
@@ -97,7 +138,7 @@ class AuthenticationService:
         cache_key = f"email_verify_{str(user.uuid)}"
 
         expiry = getattr(settings, "VERIFICATION_TOKEN_EXPIRY", 15)
-        cache.set(cache_key, token, expiry * 60)
+        cache.set(cache_key, (user.id, token), expiry * 60)
 
         EmailService.send_verification_email(user, token, expiry)
 

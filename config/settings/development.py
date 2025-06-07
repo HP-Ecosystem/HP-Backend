@@ -25,6 +25,7 @@ CORS_ALLOWED_ORIGINS = [
 
 # Email Backend for development
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+FROM_DOMAIN = env.str("FROM_DOMAIN", default="http://127.0.0.1:8000")  # noqa
 
 # Cache config
 CACHES = {
