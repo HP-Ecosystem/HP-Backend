@@ -1,3 +1,4 @@
+import traceback
 from typing import Any
 
 from django.core.exceptions import PermissionDenied
@@ -86,8 +87,6 @@ def hp_exception_handler(exc: Exception, context: dict[str, Any]) -> Response | 
     }
 
     if response is None:
-        import traceback
-
         tb = traceback.extract_tb(exc.__traceback__)
         if tb:
             last_frame = tb[-1]
@@ -146,6 +145,8 @@ def hp_exception_handler(exc: Exception, context: dict[str, Any]) -> Response | 
             custom_response_data["errors"] = {"detail": str(exc.detail)}
         else:
             custom_response_data["errors"] = {"detail": "An error occurred."}
+
+    custom_response_data["status_code"] = exc.status_code
 
     response.data = custom_response_data
 
