@@ -1,72 +1,3 @@
-
-## Getting Started
-
-### Prerequisites
-
-- Python 3.11+
-- PostgreSQL
-- uv (for package management)
-
-### Installation
-
-1. Clone the repository
-2. Create a virtual environment:
-   `uv venv --python 3.12`
-3. Install dependencies:
-   `make install`
-4. Copy `.env.template` to `.env` and configure
-5. Run migrations:
-   `make migrate`
-6. Create superuser:
-   `make superuser`
-7. Run server:
-   `make run`
-
-### API Documentation
-
-Once the server is running, you can access:
-- Swagger UI: http://localhost:8000/api/docs/swagger/
-- ReDoc: http://localhost:8000/api/docs/redoc/
-
-## Development Guidelines
-
-### Code Style
-
-- Follow PEP 8
-- Use type hints
-- Write comprehensive docstrings
-- Keep functions focused and clear
-
-### Testing
-
-- Write tests for all new features
-- Maintain test coverage above 80%
-- Use factories for test data
-- Run tests with:
-  `make test`
-- Run tests with coverage:
-  `make test-coverage`
-
-### Linting & Formatting
-
-- Lint code:
-  `make lint`
-- Format code:
-  `make format`
-
-### Cleaning
-
-- Remove Python cache and test artifacts:
-  `make clean`
-
-## Deployment
-
-[To be documented]
-
-
-
-
-
 # Housing & Properties Backend Documentation
 
 ## Overview
@@ -149,11 +80,13 @@ housing_properties/
   - **AgentProfile**: License info, specializations, ratings
   - **VendorProfile**: Business details
   - **ClientProfile**: Preferences, saved searches
-- **Custom Managers**:
+- **Custom Managers and Querysets**:
   - Chainable QuerySet methods for filtering
   - Optimized queries with select_related
   - Business logic encapsulation
   - Search functionality across multiple fields
+- **Social authentication**:
+  - Google OAuth2
 
 ## Getting Started
 
@@ -185,6 +118,7 @@ housing_properties/
 
   ```bash
   cp .env.template .env
+  # Edit .env with your settings
   ```
 - Run migrations:
 
@@ -213,15 +147,10 @@ DATABASE_URL=postgres://user:password@localhost:5432/housing_properties
 ALLOWED_HOSTS=localhost,127.0.0.1
 CORS_ALLOWED_ORIGINS=http://localhost:3000
 LOGGING_LEVEL=DEBUG
+FROM_DOMAIN=localhost:8000
+GOOGLE_OAUTH2_KEY=your-google-client-id
+GOOGLE_OAUTH2_SECRET=your-google-client-secret
 ```
-
-### API Documentation
-
-Once the server is running, you can access:
-
-- Swagger UI: http://localhost:8000/api/docs/swagger/
-- ReDoc: http://localhost:8000/api/docs/redoc/
-- Admin Interface: http://localhost:8000/admin/
 
 ### Development Commands
 
@@ -253,25 +182,59 @@ make test-coverage  # Run tests with coverage report
 make clean     # Remove cache files and artifacts
 ```
 
+### API Documentation
+
+Once the server is running, you can access:
+
+- Swagger UI: http://localhost:8000/api/docs/swagger/
+- ReDoc: http://localhost:8000/api/docs/redoc/
+- Admin Interface: http://localhost:8000/admin/
+
 ## Code Organization
 
 ### Models
 
-- Models inherit from BaseModel for common fields
+- Models inherit from `BaseModel` for common fields
 - Custom managers encapsulate query logic
 - Type-specific data stored in profile models
+
+### Services
+
+- Business logic is encapsulated in service classes (e.g., `AuthenticationService`).
+- Services handle registration, login, social authentication, email verification, and token management.
+
+### Serializers
+
+- DRF serializers for input validation and output formatting.
+- Error responses are standardized.
 
 ### Exception Handling
 
 - Custom exceptions in `core.exceptions.base`
-- Consistent error response format
-- Proper HTTP status codes
+- Consistent error response format with proper HTTP status codes.
+- Centralized exception handler (`core.exceptions.handler.hp_exception_handler`) ensures all errors are logged and returned in a predictable structure.
+
+**Example error response**:
+
+```json
+{
+  "success": false,
+  "message": "Validation error",
+  "errors": {
+    "detail": {
+      "email": "This field is required."
+    }
+  },
+  "status_code": 400
+}
+```
 
 ### Logging
 
-- Structured logging with Loguru
-- Automatic file rotation
-- Different log levels per environment
+- Uses Loguru for structured logging.
+- Logs are written to file with rotation (`10 MB` per file, `10 days` retention).
+- All standard Python logs are routed through Loguru for consistency.
+- Log configuration is in `core/logging/base.py`.
 
 ### Testing
 

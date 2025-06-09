@@ -7,55 +7,71 @@ User = get_user_model()
 
 
 class UserRegistrationSerializer(serializers.Serializer):
-    """Serializer for user registration."""
+    """
+    Serializer for user registration.
+
+    Validates and deserializes user registration data.
+    """
 
     email = serializers.EmailField(required=True)
-
     password = serializers.CharField(
         required=True,
         min_length=8,
         write_only=True,
         style={"input_type": "password"},
-        help_text="Password must be at least 8 characters",
+        help_text="Password (minimum 8 characters)",
     )
-
     user_type = serializers.ChoiceField(
-        required=True,
-        choices=User.UserType.choices,
-        help_text="Type of account to create",
+        required=True, choices=User.UserType.choices, help_text="Type of user account"
     )
-
-    first_name = serializers.CharField(required=True, max_length=30)
-
-    last_name = serializers.CharField(required=True, max_length=30)
+    first_name = serializers.CharField(
+        required=True, max_length=30, help_text="User's first name"
+    )
+    last_name = serializers.CharField(
+        required=True, max_length=30, help_text="User's last name"
+    )
 
 
 class UserLoginSerializer(serializers.Serializer):
-    """Serializer for user login."""
+    """
+    Serializer for user login.
 
-    email = serializers.EmailField(required=True)
+    Validates and deserializes user login data.
+    """
+
+    email = serializers.EmailField(required=True, help_text="User's email address")
     password = serializers.CharField(
-        required=True, write_only=True, style={"input_type": "password"}
+        required=True,
+        write_only=True,
+        style={"input_type": "password"},
+        help_text="User's password",
     )
 
 
 class TokenSerializer(serializers.Serializer):
-    """
-    Serializer for JWT token response.
+    """Serializer for JWT token response.
 
-    This is a read-only serializer that formats the response
-    from the authentication service.
+    Serializes the JWT access and refresh tokens along with basic user information.
+    Used for formatting the authentication service response.
     """
 
     access = serializers.CharField(read_only=True, help_text="JWT access token")
-
     refresh = serializers.CharField(read_only=True, help_text="JWT refresh token")
-
     user = serializers.SerializerMethodField(help_text="Basic user information")
 
     def get_user(self, obj: dict[str, Any]) -> dict[str, Any]:
-        """Format user data for response."""
+        """
+        Returns user data for the token response.
 
+        Formats the user information to include user ID, email, user type,
+        first name, last name, and email verification status.
+
+        Args:
+            obj (dict[str, Any]): The object containing user data.
+
+        Returns:
+            _ (dict[str, Any]): A dictionary containing formatted user information.
+        """
         user = obj.get("user")
         if user:
             return {
@@ -70,9 +86,17 @@ class TokenSerializer(serializers.Serializer):
 
 
 class ErrorResponseExampleSerializer(serializers.Serializer):
-    """Serializer representing error response schema for OpenApi."""
+    """
+    Serializer for error response schema in OpenApi.
 
-    success = serializers.BooleanField(read_only=True, default=False)
-    message = serializers.CharField(read_only=True)
-    errors = serializers.DictField(read_only=True)
-    status_code = serializers.IntegerField(read_only=True)
+    Defines the structure of error responses for API documentation.
+    """
+
+    success = serializers.BooleanField(
+        read_only=True, default=False, help_text="Indicates request success"
+    )
+    message = serializers.CharField(read_only=True, help_text="Error message")
+    errors = serializers.DictField(
+        read_only=True, help_text="Detailed error information"
+    )
+    status_code = serializers.IntegerField(read_only=True, help_text="HTTP status code")

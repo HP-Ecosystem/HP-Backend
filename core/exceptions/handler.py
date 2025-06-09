@@ -13,8 +13,15 @@ from core.logging import logger
 
 
 def normalize_error_detail(detail: Any) -> str | list[str] | dict[str, Any]:
-    """Normalize error details to a consistent format."""
+    """
+    Normalize error details to a consistent format.
 
+    Args:
+        detail: The error detail to normalize.
+
+    Returns:
+        Normalized error detail as a string, list, or dict.
+    """
     if isinstance(detail, str):
         return detail
 
@@ -49,11 +56,11 @@ def hp_exception_handler(exc: Exception, context: dict[str, Any]) -> Response | 
     Custom exception handler for DRF that provides consistent error responses.
 
     Args:
-        exc: The exception instance
-        context: Additional context about the exception
+        exc: The exception instance.
+        context: Additional context about the exception.
 
     Returns:
-        Response object with formatted error data or None
+        Response: DRF Response object with formatted error data, or None.
     """
     if isinstance(exc, DjangoValidationError):
         exc = exceptions.ValidationError(

@@ -1,5 +1,3 @@
-"""v1 Authentication urls."""
-
 from django.urls import path
 from social_django.urls import extra
 
