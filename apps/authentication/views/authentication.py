@@ -21,18 +21,24 @@ from core.utils.responses import StandardResponse
 
 
 class RegisterView(APIView):
-    """User registration endpoint."""
+    """Endpoint for user registration."""
 
     permission_classes = [AllowAny]
 
     @extend_schema(
         request=UserRegistrationSerializer,
-        responses={201: TokenSerializer, "400 - 500": ErrorResponseExampleSerializer},
-        description="Register a new user account via email",
+        responses={
+            201: TokenSerializer,
+            400: ErrorResponseExampleSerializer,
+            409: ErrorResponseExampleSerializer,
+            429: ErrorResponseExampleSerializer,
+            500: ErrorResponseExampleSerializer,
+        },
+        description="Register new user account",
         tags=["Authentication"],
     )
     def post(self, request: Request) -> Response:
-        """Handle user registration."""
+        """Registers a new user."""
 
         serializer = UserRegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -50,7 +56,7 @@ class RegisterView(APIView):
 
 
 class LoginView(APIView):
-    """User login endpoint."""
+    """Endpoint for user login."""
 
     permission_classes = [AllowAny]
 
@@ -61,7 +67,7 @@ class LoginView(APIView):
         tags=["Authentication"],
     )
     def post(self, request: Request) -> Response:
-        """Handle user login."""
+        """Logs in an existing user."""
 
         serializer = UserLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -79,7 +85,7 @@ class LoginView(APIView):
 
 
 class EmailVerificationView(APIView):
-    """Email verification endpoint."""
+    """Endpoint for email verification."""
 
     permission_classes = [AllowAny]
 
@@ -93,7 +99,7 @@ class EmailVerificationView(APIView):
         tags=["Authentication"],
     )
     def post(self, request: Request, user_id: str, verification_token: str) -> Response:
-        """Handle email verification."""
+        """Verifies a user's email address."""
 
         authentication_service.verify_email(user_id=user_id, token=verification_token)
 
@@ -106,7 +112,7 @@ class EmailVerificationView(APIView):
     [csrf_exempt, never_cache, psa("authentication:social-complete")], name="get"
 )
 class SocialAuthenticationBeginView(APIView):
-    """Social authentication initiation endpoint."""
+    """Endpoint to begin social authentication."""
 
     permission_classes = [AllowAny]
 
@@ -120,7 +126,7 @@ class SocialAuthenticationBeginView(APIView):
         tags=["Authentication"],
     )
     def get(self, request: Request, backend: str) -> Any:
-        """Handle social authentication initiation."""
+        """Initiates social authentication."""
 
         user_type = request.query_params.get("user_type", "CLIENT")
 
@@ -133,7 +139,7 @@ class SocialAuthenticationBeginView(APIView):
     [csrf_exempt, never_cache, psa("authentication:social-complete")], name="get"
 )
 class SocialAuthenticationCompleteView(APIView):
-    """Social authentication completion endpoint."""
+    """Endpoint to complete social authentication."""
 
     permission_classes = [AllowAny]
 
@@ -147,7 +153,7 @@ class SocialAuthenticationCompleteView(APIView):
         tags=["Authentication"],
     )
     def get(self, request, backend):
-        """Handle social authentication completion."""
+        """Completes social authentication."""
 
         user, tokens = authentication_service.complete_social_authentication(
             request, backend

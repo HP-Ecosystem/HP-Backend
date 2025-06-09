@@ -7,15 +7,20 @@ from loguru import logger
 
 class InterceptHandler(logging.Handler):
     """
-    A handler that bridges Python's standard logging to Loguru.
+    Logging handler that routes standard Python logs to Loguru.
 
-    Key functions:
-    - Maps standard log levels to Loguru levels
-    - Maintains call stack depth for accurate source tracking
-    - Preserves original log context and messages
+    - Maps standard logging levels to Loguru levels.
+    - Maintains correct call stack depth for accurate log source reporting.
+    - Preserves original log context and exception info.
     """
 
     def emit(self, record: logging.LogRecord) -> None:
+        """
+        Emit a log record to Loguru, preserving context and stack depth.
+
+        Args:
+            record: The log record to emit.
+        """
         try:
             level = logger.level(record.levelname).name
         except ValueError:
@@ -34,11 +39,12 @@ class InterceptHandler(logging.Handler):
 @lru_cache(maxsize=1)
 def setup_logging() -> None:
     """
-    Configure logging with Loguru.
+    Configure Loguru as the main logging backend.
 
-    This sets logging to stdout and file with proper formatting and rotation.
+    - Redirects all standard logging to Loguru.
+    - Sets log level and clears handlers for all loggers.
+    - Configures file logging with rotation and retention.
     """
-
     logging.root.handlers = [InterceptHandler()]
     logging.root.setLevel(settings.LOGGING_LEVEL)
 

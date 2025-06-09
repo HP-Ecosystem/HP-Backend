@@ -11,7 +11,11 @@ if TYPE_CHECKING:
 
 
 class EmailService:
-    """Service class for sending emails."""
+    """
+    Service class for sending emails.
+
+    Provides methods for sending plain text, HTML, and template-based emails.
+    """
 
     @staticmethod
     def send_email(
@@ -21,8 +25,19 @@ class EmailService:
         html_message: str | None = None,
         from_email: str | None = None,
     ) -> int:
-        """Send and return the number of emails sent."""
+        """
+        Sends a plain text or HTML email.
 
+        Args:
+            subject: The subject of the email.
+            message: The plain text message body.
+            recipient_list: A list of recipient email addresses.
+            html_message: An optional HTML message body.
+            from_email: The sender's email address (defaults to settings.DEFAULT_FROM_EMAIL).
+
+        Returns:
+            The number of emails sent successfully.
+        """
         if from_email is None:
             from_email = settings.DEFAULT_FROM_EMAIL
 
@@ -43,8 +58,19 @@ class EmailService:
         recipient_list: list[str],
         from_email: str | None = None,
     ) -> int:
-        """Send an email using a template and return the number of emails sent."""
+        """
+        Sends an email using a Django template.
 
+        Args:
+            subject: The subject of the email.
+            template_name: The name of the template (without the .html extension).
+            context: A dictionary of variables to pass to the template.
+            recipient_list: A list of recipient email addresses.
+            from_email: The sender's email address (defaults to settings.DEFAULT_FROM_EMAIL).
+
+        Returns:
+            The number of emails sent successfully.
+        """
         if from_email is None:
             from_email = settings.DEFAULT_FROM_EMAIL
 
@@ -67,8 +93,17 @@ class EmailService:
     def send_verification_email(
         user: "User", verification_token: str, token_expiry: int
     ) -> int:
-        """Send email verification email."""
+        """
+        Sends an email verification email to a user.
 
+        Args:
+            user: The user object to send the email to.
+            verification_token: The verification token to include in the email.
+            token_expiry: The token expiry time in minutes.
+
+        Returns:
+            The number of emails sent successfully.
+        """
         verification_url = reverse(
             "authentication:verify-email",
             kwargs={
