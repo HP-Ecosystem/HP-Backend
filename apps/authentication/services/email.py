@@ -75,7 +75,7 @@ class EmailService:
             from_email = settings.DEFAULT_FROM_EMAIL
 
         # Render HTML and text versions
-        html_content = render_to_string(f"{template_name}.html", context)
+        html_content = render_to_string(f"emails/{template_name}.html", context)
         text_content = strip_tags(html_content)
 
         # Create email
@@ -104,7 +104,7 @@ class EmailService:
         Returns:
             The number of emails sent successfully.
         """
-        verification_url = reverse(
+        verification_path = reverse(
             "authentication:verify-email",
             kwargs={
                 "user_id": str(user.uuid),
@@ -112,11 +112,12 @@ class EmailService:
             },
         )
 
+        verification_url = f"{settings.FROM_DOMAIN}{verification_path}"
+
         context = {
             "user": user,
             "expiry_minutes": token_expiry,
             "verification_url": verification_url,
-            "from_domain": settings.FROM_DOMAIN,
         }
 
         return EmailService.send_template_email(

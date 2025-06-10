@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from apps.authentication.models import User
 
 from apps.authentication.models import AgentProfile, ClientProfile, VendorProfile
-from core.models import BaseManager, BaseQuerySet
+from core.models import BaseQuerySet
 
 
 class UserQuerySet(BaseQuerySet):
@@ -42,7 +42,9 @@ class UserQuerySet(BaseQuerySet):
         )
 
 
-class UserManager(BaseUserManager, BaseManager):
+class UserManager(BaseUserManager):
+    """Custom manager for User model."""
+
     def get_queryset(self):
         """Returns a `UserQuerySet` object."""
         return UserQuerySet(model=self.model, using=self._db)
@@ -181,3 +183,13 @@ class UserManager(BaseUserManager, BaseManager):
     def search(self, query: str) -> "UserQuerySet":
         """Search users with basic search."""
         return self.get_queryset().search(query)
+
+    def active(self) -> BaseQuerySet:
+        """Return only active users."""
+
+        return self.get_queryset().active()
+
+    def inactive(self) -> BaseQuerySet:
+        """Return only inactive users."""
+
+        return self.get_queryset().inactive()

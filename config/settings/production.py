@@ -27,4 +27,11 @@ EMAIL_PORT = env.int("EMAIL_PORT")
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS")
 EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
-FROM_DOMAIN = env.str("FROM_DOMAIN")
+
+# Cache Configuration
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": env.str("REDIS_URL"),
+    }
+}
