@@ -8,7 +8,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 # Django Debug Toolbar
-INSTALLED_APPS += ["debug_toolbar"]  # noqa
+INSTALLED_APPS += ["debug_toolbar", "django_extensions"]  # noqa
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa
 
 INTERNAL_IPS = ["127.0.0.1", "localhost"]
@@ -25,7 +25,6 @@ CORS_ALLOWED_ORIGINS = [
 
 # Email Backend for development
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-FROM_DOMAIN = env.str("FROM_DOMAIN", default="http://127.0.0.1:8000")  # noqa
 
 # Cache config
 CACHES = {

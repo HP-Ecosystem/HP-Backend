@@ -63,6 +63,7 @@ def hp_exception_handler(exc: Exception, context: dict[str, Any]) -> Response | 
     Returns:
         Response: DRF Response object with formatted error data, or None.
     """
+    # Convert Django exceptions to DRF exceptions
     if isinstance(exc, DjangoValidationError):
         exc = exceptions.ValidationError(
             detail=exc.message_dict if hasattr(exc, "message_dict") else exc.messages
@@ -146,7 +147,8 @@ def hp_exception_handler(exc: Exception, context: dict[str, Any]) -> Response | 
         else:
             custom_response_data["errors"] = {"detail": "An error occurred."}
 
-    custom_response_data["status_code"] = exc.status_code
+    if hasattr(exc, "status_code"):
+        custom_response_data["status_code"] = exc.status_code
 
     response.data = custom_response_data
 

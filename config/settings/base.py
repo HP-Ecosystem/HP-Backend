@@ -49,7 +49,6 @@ THIRD_PARTY_APPS = [
     "oauth2_provider",
     "social_django",
     "drf_social_oauth2",
-    "django_extensions",
 ]
 
 LOCAL_APPS = [
@@ -240,3 +239,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env.str(
 )
 SOCIAL_AUTH_GOOGLE_OAUTH2_USER_FIELDS = ["email", "first_name", "last_name"]
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ["email", "profile"]
+
+# Domain configuration
+FROM_DOMAIN = env.str("FROM_DOMAIN", default="http://127.0.0.1:8000")  # noqa

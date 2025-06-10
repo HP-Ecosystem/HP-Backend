@@ -116,7 +116,6 @@ class BaseModel(models.Model, BaseIDStrategyMixin):
     )
     is_active = models.BooleanField(
         default=True,
-        db_index=True,
         help_text="Status indicating whether record is active or soft-deleted",
     )
 

@@ -23,9 +23,7 @@ class User(auth_models.AbstractUser, BaseModel):
         ADMIN = "ADMIN", "Administrator"
 
     username = None  # overriden
-    email = models.EmailField(
-        unique=True, db_index=True, help_text="User's email address"
-    )
+    email = models.EmailField(unique=True, help_text="User's email address")
     uuid = models.UUIDField(
         default=uuid6.uuid7, editable=False, unique=True, help_text="Unique identifier"
     )
@@ -33,11 +31,13 @@ class User(auth_models.AbstractUser, BaseModel):
         max_length=10,
         choices=UserType.choices,
         default=UserType.CLIENT,
-        db_index=True,
         help_text="Type of user",
     )
     phone_number = models.CharField(
-        max_length=20, blank=True, unique=True, help_text="User's phone number"
+        max_length=20,
+        blank=True,
+        null=True,
+        help_text="User's phone number",
     )
     is_email_verified = models.BooleanField(
         default=False, help_text="Whether the email is verified"
@@ -58,9 +58,9 @@ class User(auth_models.AbstractUser, BaseModel):
         verbose_name = "User"
         verbose_name_plural = "Users"
         indexes = [
-            models.Index(fields=["email", "is_active"]),
+            models.Index(fields=["email", "is_email_verified", "is_active"]),
             models.Index(fields=["user_type", "is_active"]),
-            models.Index(fields=["uuid"]),
+            models.Index(fields=["uuid", "is_email_verified", "is_active"]),
         ]
 
     def __str__(self) -> str:
