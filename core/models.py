@@ -108,10 +108,10 @@ class BaseIDStrategyMixin:
 class BaseModel(models.Model, BaseIDStrategyMixin):
     """Abstract base model with common fields and methods."""
 
-    created = models.DateTimeField(
+    created_at = models.DateTimeField(
         auto_now_add=True, db_index=True, help_text="Timestamp for record creation"
     )
-    updated = models.DateTimeField(
+    updated_at = models.DateTimeField(
         auto_now=True, db_index=True, help_text="Timestamp for record updates"
     )
     is_active = models.BooleanField(
@@ -123,12 +123,12 @@ class BaseModel(models.Model, BaseIDStrategyMixin):
         """Meta options for BaseModel."""
 
         abstract = True
-        ordering = ["-created"]
-        indexes = [models.Index(fields=["created", "is_active"])]
+        ordering = ["-created_at"]
+        indexes = [models.Index(fields=["created_at", "is_active"])]
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         """Override save to update timestamps."""
-        self.updated = timezone.now()
+        self.updated_at = timezone.now()
         return super().save(*args, **kwargs)
 
     def soft_delete(self) -> None:
