@@ -4,19 +4,20 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from drf_spectacular.utils import extend_schema
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from social_django.utils import psa
 
-from apps.authentication.serializers import (
+from core.serializers import (
     ErrorResponseExampleSerializer,
     TokenSerializer,
     UserLoginSerializer,
+    UserLogoutSerializer,
     UserRegistrationSerializer,
 )
-from apps.authentication.services import authentication_service
+from core.services import authentication_service
 from core.utils.responses import StandardResponse
 
 
@@ -173,3 +174,31 @@ class SocialAuthenticationCompleteView(APIView):
             return StandardResponse.success(
                 data=response_serializer.data, message="Login successful. Welcome back!"
             )
+
+
+class LogoutView(APIView):
+    """Endpoint for user logout."""
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserLogoutSerializer
+
+    @extend_schema(
+        request=UserLogoutSerializer,
+        responses={
+            200: {"message": "string"},
+            "400 - 500": ErrorResponseExampleSerializer,
+        },
+        description="Logout user from current session by blacklisting access token",
+        tags=["Authentication"],
+    )
+    def post(self, request: Request) -> Response:
+        """Logs out the user by blacklisting access token."""
+        serializer = self.serializer_class(
+            data={}, context={"request_meta": request.META}
+        )
+        serializer.is_valid(raise_exception=True)
+
+        access_token = serializer.validated_data.get("access_token")
+        result = authentication_service.logout(request.user, access_token)
+
+        return StandardResponse.success(message=result)

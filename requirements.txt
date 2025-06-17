@@ -20,6 +20,7 @@ djangorestframework-simplejwt==5.5.0
 drf-social-oauth2==3.1.0
 drf-spectacular==0.28.0
 drf-spectacular-sidecar==2025.6.1
+factory-boy==3.3.3
 faker==37.3.0
 filelock==3.18.0
 -e file:///home/iamprecieee/Desktop/HP-Backend
@@ -38,12 +39,14 @@ packaging==25.0
 platformdirs==4.3.8
 pluggy==1.6.0
 pre-commit==4.2.0
+psycopg2-binary==2.9.10
 pycparser==2.22
 pygments==2.19.1
 pyjwt==2.9.0
 pyopenssl==25.1.0
 pytest==8.4.0
 pytest-cov==6.1.1
+pytest-django==4.11.1
 python3-openid==3.2.0
 pyyaml==6.0.2
 referencing==0.36.2

@@ -4,6 +4,7 @@ from social_django.urls import extra
 from apps.authentication.views import (
     EmailVerificationView,
     LoginView,
+    LogoutView,
     RegisterView,
     SocialAuthenticationBeginView,
     SocialAuthenticationCompleteView,
@@ -29,4 +30,5 @@ urlpatterns = [
         SocialAuthenticationCompleteView.as_view(),
         name="social-complete",
     ),
+    path("logout/", LogoutView.as_view(), name="logout"),
 ]

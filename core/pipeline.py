@@ -2,7 +2,6 @@ from typing import Any
 
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 from social_core.pipeline.user import USER_FIELDS
 
 from core.exceptions import BadRequestError
@@ -35,7 +34,7 @@ def create_user(
     if user:
         if not user.is_email_verified:
             raise BadRequestError(
-                _("Requested user email is not verified. Please verify your email")
+                detail="Requested user email is not verified. Please verify your email"
             )
 
         user.last_login = timezone.now()

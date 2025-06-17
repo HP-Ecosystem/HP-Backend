@@ -5,6 +5,7 @@ description = "Housing & Properties - Multi-sided marketplace backend"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "cryptography>=45.0.3",
     "dj-database-url>=3.0.0",
     "django>=5.2.1",
     "django-cors-headers>=4.7.0",
@@ -14,7 +15,9 @@ dependencies = [
     "drf-social-oauth2>=3.1.0",
     "drf-spectacular>=0.28.0",
     "drf-spectacular-sidecar>=2025.6.1",
+    "jwcrypto>=1.5.6",
     "loguru>=0.7.3",
+    "psycopg2-binary>=2.9.10",
     "uuid6>=2024.7.10",
     "whitenoise>=6.9.0",
 ]

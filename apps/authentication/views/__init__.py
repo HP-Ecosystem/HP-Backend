@@ -1,6 +1,7 @@
 from apps.authentication.views.authentication import (
     EmailVerificationView,
     LoginView,
+    LogoutView,
     RegisterView,
     SocialAuthenticationBeginView,
     SocialAuthenticationCompleteView,
@@ -12,4 +13,5 @@ __all__ = [
     "EmailVerificationView",
     "SocialAuthenticationBeginView",
     "SocialAuthenticationCompleteView",
+    "LogoutView",
 ]

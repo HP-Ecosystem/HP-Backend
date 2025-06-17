@@ -11,8 +11,4 @@ DATABASES = {
 }
 
 # Disable migrations during tests
-MIGRATION_MODULES = {
-    app: None
-    for app in INSTALLED_APPS  # noqa
-    if app.startswith("apps.")
-}
+MIGRATION_MODULES = {app: None for app in INSTALLED_APPS if app.startswith("apps.")}  # noqa

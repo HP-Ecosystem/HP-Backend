@@ -1,7 +1,4 @@
-from typing import Any
-
 from django.db import models
-from django.utils import timezone
 
 
 class BaseQuerySet(models.QuerySet):
@@ -65,13 +62,12 @@ class BaseIDStrategyMixin:
     @property
     def public_id(self) -> str:
         """
-        Get public identifier for external use.
+        Get public identifier for external use (UUID as string).
 
         Returns:
             String representation of UUID for API responses, URLs, etc.
         """
-        if hasattr(self, "uuid"):
-            return str(self.uuid)
+        return str(self.uuid) if hasattr(self, "uuid") else None
 
     @property
     def internal_id(self) -> str:
@@ -84,7 +80,7 @@ class BaseIDStrategyMixin:
         return self.pk
 
     @classmethod
-    def get_by_public_id(cls, public_id: str) -> BaseQuerySet:
+    def get_by_public_id(cls, public_id: str) -> "BaseModel":
         """
         Retrieve instance by public UUID.
 
@@ -120,16 +116,9 @@ class BaseModel(models.Model, BaseIDStrategyMixin):
     )
 
     class Meta:
-        """Meta options for BaseModel."""
-
         abstract = True
         ordering = ["-created_at"]
         indexes = [models.Index(fields=["created_at", "is_active"])]
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        """Override save to update timestamps."""
-        self.updated_at = timezone.now()
-        return super().save(*args, **kwargs)
 
     def soft_delete(self) -> None:
         """Soft delete the record."""
@@ -142,5 +131,41 @@ class BaseModel(models.Model, BaseIDStrategyMixin):
         self.save(update_fields=["is_active"])
 
     def __str__(self):
-        """String representation using public ID"""
         return f"{self.__class__.__name__}({self.public_id})"
+
+
+class BaseProfileModel(BaseModel):
+    """
+    Abstract base profile model for user profiles.
+
+    Contains common fields like user reference and timestamps.
+    Subclasses should define specific profile details.
+    """
+
+    user = models.OneToOneField(
+        "authentication.User",
+        on_delete=models.CASCADE,
+        related_name="%(class)s_profile",
+        primary_key=True,
+    )
+    business_name = models.CharField(
+        max_length=100, blank=True, help_text="Name of business or agency or vendor"
+    )
+    business_address = models.TextField(
+        blank=True, help_text="Location of the business"
+    )
+    business_registration_no = models.CharField(
+        max_length=50, blank=True, help_text="Business registration number"
+    )
+    is_business_verified = models.BooleanField(
+        default=False, help_text="Whether a business is verified"
+    )
+    license_number = models.CharField(
+        max_length=50, blank=True, help_text="Professional license number"
+    )
+    is_license_verified = models.BooleanField(
+        default=False, help_text="Whether an agent's credentials are verified"
+    )
+
+    class Meta:
+        abstract = True

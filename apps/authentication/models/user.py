@@ -1,8 +1,8 @@
 import uuid6
-from authentication.managers import UserManager
 from django.contrib.auth import models as auth_models
 from django.db import models
 
+from core.managers import UserManager
 from core.models import BaseModel
 
 
@@ -52,8 +52,6 @@ class User(auth_models.AbstractUser, BaseModel):
     REQUIRED_FIELDS = []
 
     class Meta:
-        """Metadata options for the User model."""
-
         db_table = "users"
         verbose_name = "User"
         verbose_name_plural = "Users"
@@ -64,7 +62,6 @@ class User(auth_models.AbstractUser, BaseModel):
         ]
 
     def __str__(self) -> str:
-        """Returns the user's email address as the string representation."""
         return self.email
 
     @property
