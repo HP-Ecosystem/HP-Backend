@@ -10,8 +10,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from social_django.utils import psa
 
-from core.serializers import (
+from core.common.serializers import (
     ErrorResponseExampleSerializer,
+    ResponseExampleSerializer,
+)
+from core.serializers import (
     TokenSerializer,
     UserLoginSerializer,
     UserLogoutSerializer,
@@ -29,11 +32,8 @@ class RegisterView(APIView):
     @extend_schema(
         request=UserRegistrationSerializer,
         responses={
-            201: TokenSerializer,
-            400: ErrorResponseExampleSerializer,
-            409: ErrorResponseExampleSerializer,
-            429: ErrorResponseExampleSerializer,
-            500: ErrorResponseExampleSerializer,
+            201: ResponseExampleSerializer,
+            "400-500": ErrorResponseExampleSerializer,
         },
         description="Register new user account",
         tags=["Authentication"],
@@ -63,7 +63,10 @@ class LoginView(APIView):
 
     @extend_schema(
         request=UserLoginSerializer,
-        responses={200: TokenSerializer, "400 - 500": ErrorResponseExampleSerializer},
+        responses={
+            200: ResponseExampleSerializer,
+            "400-500": ErrorResponseExampleSerializer,
+        },
         description="Log in to an existing account via email",
         tags=["Authentication"],
     )
@@ -93,8 +96,8 @@ class EmailVerificationView(APIView):
     @extend_schema(
         request=None,
         responses={
-            200: {"message": "string"},
-            "400 - 500": ErrorResponseExampleSerializer,
+            200: ResponseExampleSerializer,
+            "400-500": ErrorResponseExampleSerializer,
         },
         description="Verify email address",
         tags=["Authentication"],
@@ -121,7 +124,7 @@ class SocialAuthenticationBeginView(APIView):
         request=None,
         responses={
             301: None,
-            "400 - 500": ErrorResponseExampleSerializer,
+            "400-500": ErrorResponseExampleSerializer,
         },
         description="Begin social authentication",
         tags=["Authentication"],
@@ -147,8 +150,8 @@ class SocialAuthenticationCompleteView(APIView):
     @extend_schema(
         request=UserRegistrationSerializer,
         responses={
-            "200 - 201": TokenSerializer,
-            "400 - 500": ErrorResponseExampleSerializer,
+            "200-201": ResponseExampleSerializer,
+            "400-500": ErrorResponseExampleSerializer,
         },
         description="Register a new user account via social backends",
         tags=["Authentication"],
@@ -185,8 +188,8 @@ class LogoutView(APIView):
     @extend_schema(
         request=UserLogoutSerializer,
         responses={
-            200: {"message": "string"},
-            "400 - 500": ErrorResponseExampleSerializer,
+            200: ResponseExampleSerializer,
+            "400-500": ErrorResponseExampleSerializer,
         },
         description="Logout user from current session by blacklisting access token",
         tags=["Authentication"],

@@ -19,6 +19,10 @@ superuser:
 run:
 	uv run manage.py runserver
 
+.PHONY: run-cert
+run-cert:
+	uv run manage.py runserver_plus --cert-file cert.crt
+
 .PHONY: test
 test:
 	pytest

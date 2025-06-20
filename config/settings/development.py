@@ -23,6 +23,14 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
 ]
 
+DATABASES = {
+    "default": dj_database_url.config(  # noqa
+        default="sqlite:///db.sqlite3",
+        conn_max_age=env.int("CONN_MAX_AGE", default=600),  # noqa
+        conn_health_checks=True,
+    )
+}
+
 # Email Backend for development
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
